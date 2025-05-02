@@ -9,5 +9,16 @@ pkgs.mkShell {
 
   shellHook = ''
     echo "Welcome to the utfscan dev shell!"
+
+    # Install stable Rust toolchain if not already installed
+    if [ ! -f "$HOME/.cargo/bin/rustc" ]; then
+      rustup install stable
+    fi
+
+    # Set the default toolchain to stable
+    rustup default stable
+
+    # Add cargo and rustup to the PATH if needed
+    export PATH="$HOME/.cargo/bin:$PATH"
   '';
 }
