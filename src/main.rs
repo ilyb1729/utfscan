@@ -33,7 +33,8 @@ fn main() -> io::Result<()> {
 
         for _ in 0..length {
             if file.read(&mut buffer)? == 0 {
-                break;
+                warn = true;
+                continue;
             }
             let byte = buffer[0];
             cur <<= 6;
