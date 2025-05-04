@@ -7,7 +7,7 @@ fn main() -> io::Result<()> {
     let mut buffer = [0u8; 1];
     let mut warn = false;
 
-    while file.read(&mut buffer)? != 0 {
+    'outer: while file.read(&mut buffer)? != 0 {
         let byte = buffer[0];
 
         if (byte >> 7) & 1 == 0 {
@@ -16,11 +16,17 @@ fn main() -> io::Result<()> {
         }
 
         let mut length = 0;
-        for i in (4..=6).rev() {
-            if (byte >> i) & 1 == 0 {
-                break;
+        'zz: {
+            for i in (4..=6).rev() {
+                if (byte >> i) & 1 == 0 {
+                    break 'zz;
+                }
+                length += 1;
             }
-            length += 1;
+            if (byte >> 3) & 1 == 1 {
+                warn = true;
+                continue 'outer;
+            }
         }
 
         let shift = 2 + length;
