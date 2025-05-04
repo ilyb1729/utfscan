@@ -19,6 +19,6 @@ pkgs.mkShell {
     rustup default stable
 
     # Add cargo and rustup to the PATH if needed
-    export PATH="$HOME/.cargo/bin:$PATH"
+    export PATH="$HOME/.local/share/nvim/mason/bin:$HOME/.cargo/bin:$PATH"
   '';
 }
