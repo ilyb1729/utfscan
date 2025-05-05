@@ -1,17 +1,12 @@
-use std::fs::File;
-use std::io::{self, Read};
-
-fn main() -> io::Result<()> {
-    let mut file = File::open("zzz.txt")?;
-    // let mut out = File::open("out.txt");
-    let mut buffer = [0u8; 1];
+fn utf8(arr: Vec<u8>) -> Result<Vec<u32>, Vec<u32>> {
+    let mut it = arr.iter();
     let mut warn = false;
+    let mut ans: Vec<u32> = Vec::new();
 
-    'outer: while file.read(&mut buffer)? != 0 {
-        let byte = buffer[0];
-
+    'outer: while let Some(byte) = it.next() {
         if (byte >> 7) & 1 == 0 {
-            println!("{}", byte);
+            println!("fuck {byte}");
+            ans.push(*byte as u32);
             continue;
         }
 
@@ -30,7 +25,7 @@ fn main() -> io::Result<()> {
         }
 
         let shift = 2 + length;
-        let mut cur = (byte << shift) >> shift;
+        let mut cur = ((byte << shift) >> shift) as u32;
 
         if cur == 0 || length == 0 {
             warn = true;
@@ -38,21 +33,30 @@ fn main() -> io::Result<()> {
         }
 
         for _ in 0..length {
-            if file.read(&mut buffer)? == 0 {
+            if let Some(byte) = it.next() {
+                cur <<= 6;
+                cur += ((byte << 2) >> 2) as u32;
+            } else {
                 warn = true;
-                continue;
+                continue 'outer;
             }
-            let byte = buffer[0];
-            cur <<= 6;
-            cur += (byte << 2) >> 2;
         }
 
-        println!("{}", cur);
+        ans.push(cur);
     }
 
-    if warn {
-        println!("Error occured while parsing")
-    }
+    if !warn { Ok(ans) } else { Err(ans) }
+}
 
-    Ok(())
+fn main() {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ascii() {
+        let v1 = vec![1, 2, 3];
+        assert_eq!(utf8(v1), Ok(vec![1, 2, 3]));
+    }
 }
