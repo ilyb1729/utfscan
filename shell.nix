@@ -5,10 +5,14 @@ pkgs.mkShell {
     pkgs.rustup
     pkgs.pkg-config
     pkgs.openssl
+    pkgs.git
   ];
 
   shellHook = ''
     echo "Welcome to the utfscan dev shell!"
+
+    # Set TMPDIR environment variable
+    export TMPDIR="/tmp"
 
     # Install stable Rust toolchain if not already installed
     if [ ! -f "$HOME/.cargo/bin/rustc" ]; then
