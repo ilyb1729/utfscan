@@ -2,6 +2,8 @@ use std::fs::File;
 use std::io::{self, Error, Read};
 
 fn main() -> io::Result<()> {
+    println!("Running from: {:?}", std::env::current_dir()?);
+
     let mut file = File::open("zzz.txt")?;
     // let mut out = File::open("out.txt");
     let mut buffer = [0u8; 1];
@@ -49,6 +51,8 @@ fn main() -> io::Result<()> {
 
         println!("{}", cur);
     }
+
+    println!("fuck");
 
     if warn {
         println!("Error occured while parsing")
