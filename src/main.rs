@@ -11,7 +11,7 @@ fn main() -> io::Result<()> {
         let byte = buffer[0];
 
         if (byte >> 7) & 1 == 0 {
-            warn = true;
+            println!("{}", byte);
             continue;
         }
 
@@ -32,7 +32,7 @@ fn main() -> io::Result<()> {
         let shift = 2 + length;
         let mut cur = (byte << shift) >> shift;
 
-        if cur == 0 {
+        if cur == 0 || length == 0 {
             warn = true;
             continue;
         }
@@ -43,7 +43,6 @@ fn main() -> io::Result<()> {
                 continue;
             }
             let byte = buffer[0];
-            println!("{}", byte);
             cur <<= 6;
             cur += (byte << 2) >> 2;
         }
