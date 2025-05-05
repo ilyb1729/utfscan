@@ -1,9 +1,7 @@
 use std::fs::File;
-use std::io::{self, Error, Read};
+use std::io::{self, Read};
 
 fn main() -> io::Result<()> {
-    println!("Running from: {:?}", std::env::current_dir()?);
-
     let mut file = File::open("zzz.txt")?;
     // let mut out = File::open("out.txt");
     let mut buffer = [0u8; 1];
@@ -18,10 +16,10 @@ fn main() -> io::Result<()> {
         }
 
         let mut length = 0;
-        'zz: {
+        'inner: {
             for i in (4..=6).rev() {
                 if (byte >> i) & 1 == 0 {
-                    break 'zz;
+                    break 'inner;
                 }
                 length += 1;
             }
@@ -45,14 +43,13 @@ fn main() -> io::Result<()> {
                 continue;
             }
             let byte = buffer[0];
+            println!("{}", byte);
             cur <<= 6;
             cur += (byte << 2) >> 2;
         }
 
         println!("{}", cur);
     }
-
-    println!("fuck");
 
     if warn {
         println!("Error occured while parsing")
