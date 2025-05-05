@@ -68,4 +68,10 @@ mod tests {
         let v2 = vec![0b10110101, 127, 128];
         assert_eq!(utf8(v2), Err(vec![127]));
     }
+
+    #[test]
+    fn multi_bytes() {
+        let v1 = vec![0b11110111, 128, 128, 128, 127];
+        assert_eq!(utf8(v1), Ok(vec![0b111000000000000000000, 127]));
+    }
 }
