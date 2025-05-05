@@ -57,5 +57,15 @@ mod tests {
     fn ascii() {
         let v1 = vec![1, 2, 3];
         assert_eq!(utf8(v1), Ok(vec![1, 2, 3]));
+        let v2 = vec![127; 3];
+        assert_eq!(utf8(v2), Ok(vec![127; 3]));
+    }
+
+    #[test]
+    fn invalid_start() {
+        let v1 = vec![0b10110101; 10];
+        assert_eq!(utf8(v1), Err(vec![]));
+        let v2 = vec![0b10110101, 127, 128];
+        assert_eq!(utf8(v2), Err(vec![127]));
     }
 }
