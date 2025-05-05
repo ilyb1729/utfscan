@@ -5,7 +5,6 @@ fn utf8(arr: Vec<u8>) -> Result<Vec<u32>, Vec<u32>> {
 
     'outer: while let Some(byte) = it.next() {
         if (byte >> 7) & 1 == 0 {
-            println!("fuck {byte}");
             ans.push(*byte as u32);
             continue;
         }
